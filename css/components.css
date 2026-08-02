@@ -1,0 +1,506 @@
+/* ============================================
+   بطاقة القسم (الشاشة الرئيسية)
+   ============================================ */
+.section-card {
+  --section-color: var(--color-primary);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.section-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--section-color) 18%, transparent), transparent 70%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.section-card:hover,
+.section-card:focus-visible {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--shadow-elevated);
+  border-color: color-mix(in srgb, var(--section-color) 40%, var(--color-border));
+}
+
+.section-card:hover::before,
+.section-card:focus-visible::before {
+  opacity: 1;
+}
+
+.section-card:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+.section-card__icon {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--section-color) 15%, transparent);
+  color: var(--section-color);
+  transition: transform var(--transition-slow);
+}
+
+.section-card:hover .section-card__icon {
+  transform: rotate(-8deg) scale(1.1);
+  animation: icon-wiggle 1.2s ease-in-out infinite;
+}
+
+.section-card__icon svg {
+  width: 32px;
+  height: 32px;
+  stroke: currentColor;
+}
+
+.section-card__title {
+  font-weight: 700;
+  font-size: calc(1.1rem * var(--font-scale));
+  text-align: center;
+}
+
+.section-card__desc {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ============================================
+   بطاقة الذكر / الدعاء
+   ============================================ */
+.dhikr-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(16px);
+  animation: card-in var(--transition-slow) forwards;
+}
+
+.dhikr-card__text {
+  font-family: var(--font-arabic);
+  font-size: var(--font-size-dhikr);
+  line-height: 2.1;
+  color: var(--color-text);
+}
+
+.dhikr-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--color-border);
+}
+
+.dhikr-card__source {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+.dhikr-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--font-size-small);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary) 16%, transparent);
+  color: var(--color-primary-dark);
+}
+
+:root[data-theme="dark"] .dhikr-card__badge {
+  background: color-mix(in srgb, var(--color-primary) 26%, var(--color-surface));
+  color: #eafff9;
+}
+
+.dhikr-card__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #1f2937;
+  font-weight: bold;
+  font-size: var(--font-size-small);
+  white-space: nowrap;
+}
+
+.dhikr-card__virtue {
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.dhikr-card__actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+  transition: background var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+}
+
+.icon-btn:hover {
+  background: var(--color-primary);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.icon-btn:active {
+  transform: scale(0.94);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
+/* ============================================
+   شريط الإعدادات العلوي (ثيم / حجم الخط)
+   ============================================ */
+.settings-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.settings-group button {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+}
+
+.settings-group button svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.settings-group button:hover {
+  background: var(--color-primary);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.settings-group button:active {
+  transform: scale(0.94);
+}
+
+/* ============================================
+   التنبيه العائم (Toast)
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--color-text);
+  color: var(--color-bg-elevated);
+  padding: 0.65rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-small);
+  box-shadow: var(--shadow-elevated);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================
+   إشعار تثبيت التطبيق (عائم وأنيق)
+   ============================================ */
+.install-toast {
+  position: fixed;
+  z-index: 90;
+  bottom: var(--space-md);
+  inset-inline: var(--space-md);
+  margin-inline: auto;
+  max-width: 380px;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevated);
+  padding: var(--space-md);
+  animation: install-toast-in var(--transition-slow) both;
+}
+
+/* على الشاشات الأوسع: تثبيته في الزاوية بعيدًا عن المحتوى بدلًا من المنتصف */
+@media (min-width: 640px) {
+  .install-toast {
+    inset-inline-end: auto;
+    inset-inline-start: var(--space-md);
+    margin-inline: 0;
+    bottom: var(--space-lg);
+  }
+}
+
+.install-toast.is-leaving {
+  animation: install-toast-out var(--transition-base) forwards;
+}
+
+.install-toast__close {
+  position: absolute;
+  top: 0.6rem;
+  inset-inline-end: 0.6rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  border-radius: 50%;
+}
+
+.install-toast__close:hover {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+.install-toast__icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  color: var(--color-primary);
+}
+
+.install-toast__icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+}
+
+.install-toast__body {
+  flex: 1;
+  min-width: 160px;
+}
+
+.install-toast__title {
+  font-size: calc(1.05rem * var(--font-scale));
+  font-weight: 700;
+}
+
+.install-toast__desc {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin-top: 0.2rem;
+}
+
+.install-toast__actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.install-toast__later,
+.install-toast__install {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 1rem;
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.install-toast__later {
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.install-toast__later:hover {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+.install-toast__install {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.install-toast__install:hover {
+  transform: translateY(-1px);
+  background: var(--color-primary-dark);
+}
+
+/* ============================================
+   بوصلة اتجاه القبلة
+   ============================================ */
+.qibla {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  padding-bottom: var(--space-xl);
+}
+
+.qibla__compass {
+  position: relative;
+  width: min(240px, 70vw);
+  height: min(240px, 70vw);
+}
+
+.qibla__dial {
+  width: 100%;
+  height: 100%;
+}
+
+.qibla__dial circle {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 1.5;
+}
+
+.qibla__dial text {
+  fill: var(--color-text-muted);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.qibla__needle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 38%;
+  background: linear-gradient(to top, transparent, var(--color-primary));
+  border-radius: 999px;
+  transform-origin: bottom center;
+  transform: translate(-50%, -100%) rotate(0deg);
+  transition: transform 0.4s ease-out;
+}
+
+.qibla__needle-kaaba {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.qibla__status {
+  text-align: center;
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+  min-height: 1.6em;
+}
+
+.qibla__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.qibla__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.2rem;
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.qibla__btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
+.qibla__btn[hidden] {
+  display: none;
+}
+
+.qibla__btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--color-border);
+}
+
+.qibla__btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.qibla__btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.qibla__btn--primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.qibla__note {
+  max-width: 460px;
+  text-align: center;
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+

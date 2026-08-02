@@ -1,0 +1,64 @@
+{
+  "$schema": "./schema/sections.schema.json",
+  "sections": [
+    {
+      "id": "morning-azkar",
+      "title": "أذكار الصباح",
+      "titleEn": "Morning Remembrance",
+      "icon": "sun",
+      "type": "list",
+      "description": "أذكار مأثورة تُقال في الصباح من طلوع الفجر إلى شروق الشمس",
+      "file": "data/morning-azkar.json",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "evening-azkar",
+      "title": "أذكار المساء",
+      "titleEn": "Evening Remembrance",
+      "icon": "moon",
+      "type": "list",
+      "description": "أذكار مأثورة تُقال في المساء من العصر إلى غروب الشمس",
+      "file": "data/evening-azkar.json",
+      "color": "#6366f1"
+    },
+    {
+      "id": "ruqyah",
+      "title": "الرقية الشرعية",
+      "titleEn": "Legal Ruqyah",
+      "icon": "shield",
+      "type": "list",
+      "description": "آيات وأدعية للاستشفاء والتحصين من العين والسحر والحسد",
+      "file": "data/ruqyah.json",
+      "color": "#10b981"
+    },
+    {
+      "id": "quran-duas",
+      "title": "أدعية من القرآن",
+      "titleEn": "Duas from the Quran",
+      "icon": "book",
+      "type": "list",
+      "description": "أدعية وردت على ألسنة الأنبياء والصالحين في القرآن الكريم",
+      "file": "data/quran-duas.json",
+      "color": "#0ea5e9"
+    },
+    {
+      "id": "asma-ul-husna",
+      "title": "أسماء الله الحسنى",
+      "titleEn": "The 99 Names of Allah",
+      "icon": "sparkles",
+      "type": "list",
+      "description": "أسماء الله الحسنى التسعة والتسعون مع معانيها",
+      "file": "data/asma-ul-husna.json",
+      "color": "#ec4899"
+    },
+    {
+      "id": "qibla",
+      "title": "اتجاه القبلة",
+      "titleEn": "Qibla Direction",
+      "icon": "compass",
+      "type": "qibla",
+      "description": "تحديد اتجاه الكعبة المشرفة بدقة من موقعك الحالي",
+      "color": "#8b5cf6"
+    }
+  ]
+}

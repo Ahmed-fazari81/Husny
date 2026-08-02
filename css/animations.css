@@ -1,0 +1,115 @@
+/* ============================================
+   الحركات والانتقالات
+   ============================================ */
+@keyframes card-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes icon-wiggle {
+  0%,
+  100% {
+    transform: rotate(-8deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(8deg) scale(1.1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 45%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 14px transparent;
+  }
+}
+
+/* انتقال بين الصفحات (view) */
+.view {
+  animation: slide-up var(--transition-slow) both;
+}
+
+/* تأخير متتابع لبطاقات الأقسام عند الظهور */
+.sections-grid .section-card {
+  opacity: 0;
+  animation: slide-up var(--transition-slow) forwards;
+}
+
+.sections-grid .section-card:nth-child(1) { animation-delay: 0.05s; }
+.sections-grid .section-card:nth-child(2) { animation-delay: 0.12s; }
+.sections-grid .section-card:nth-child(3) { animation-delay: 0.19s; }
+.sections-grid .section-card:nth-child(4) { animation-delay: 0.26s; }
+.sections-grid .section-card:nth-child(5) { animation-delay: 0.33s; }
+
+/* تأخير متتابع لبطاقات الأذكار */
+.dhikr-list .dhikr-card:nth-child(n) {
+  animation-delay: calc(0.04s * var(--i, 0));
+}
+
+/* نبضة عند نسخ/مشاركة الذكر */
+.icon-btn.is-pulsing {
+  animation: pulse-ring 0.6s ease-out;
+}
+
+/* إشعار تثبيت التطبيق: دخول وخروج ناعمان */
+@keyframes install-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes install-toast-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+}
+
+/* دوران بسيط لأيقونة التحميل */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: var(--space-lg) auto;
+}

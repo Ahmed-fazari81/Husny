@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>حصني - أذكار وأدعية</title>
+  <meta name="description" content="تطبيق حصني: أذكار الصباح والمساء، الرقية الشرعية، وأدعية من القرآن والسنة، يعمل بدون إنترنت.">
+  <meta name="theme-color" content="#0f766e">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- الأيقونات -->
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+
+  <!-- دعم iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="حصني">
+
+  <!-- دعم Windows -->
+  <meta name="msapplication-TileColor" content="#0f766e">
+  <meta name="msapplication-TileImage" content="assets/icons/icon-192.png">
+
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="app" data-route="home">
+    <header class="app-header">
+      <div class="app-header__brand">
+        <button id="back-btn" class="back-button" type="button" aria-label="العودة للرئيسية">
+          <span class="visually-hidden">رجوع</span>
+        </button>
+        <span>حصني</span>
+      </div>
+      <div class="app-header__actions">
+        <div class="settings-group" role="group" aria-label="حجم الخط">
+          <button id="font-dec" type="button" aria-label="تصغير الخط"></button>
+          <button id="font-inc" type="button" aria-label="تكبير الخط"></button>
+        </div>
+        <button id="theme-btn" class="icon-btn" type="button" aria-label="تبديل الوضع الليلي/النهاري"></button>
+      </div>
+    </header>
+
+    <main id="main-view" class="app-main view" aria-live="polite"></main>
+
+    <footer class="app-footer">
+      <p>حصني — جُمعت النصوص من مصادر إسلامية موثوقة، القرآن الكريم والسنة النبوية الصحيحة.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

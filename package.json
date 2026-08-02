@@ -1,0 +1,20 @@
+{
+  "name": "hisni-azkar-pwa",
+  "version": "1.0.0",
+  "description": "تطبيق ويب تقدمي (PWA) للأذكار والأدعية الإسلامية - يعمل بالكامل دون إنترنت",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx serve . -l 5000",
+    "lint": "eslint js/**/*.js",
+    "lint:fix": "eslint js/**/*.js --fix",
+    "format": "prettier --write \"**/*.{js,css,html,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,css,html,json,md}\""
+  },
+  "keywords": ["pwa", "azkar", "adhkar", "islamic", "quran", "hadith", "vanilla-js"],
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^9.9.0",
+    "prettier": "^3.3.3"
+  }
+}

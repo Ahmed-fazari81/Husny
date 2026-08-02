@@ -1,0 +1,7 @@
+/* ملف التجميع الرئيسي: يستورد كل ملفات الأنماط بالترتيب الصحيح */
+@import "fonts.css";
+@import "variables.css";
+@import "base.css";
+@import "layout.css";
+@import "components.css";
+@import "animations.css";

@@ -1,0 +1,89 @@
+/* ============================================
+   المتغيرات العامة (Design Tokens)
+   ============================================ */
+:root {
+  /* الألوان الأساسية - الوضع النهاري */
+  --color-bg: #faf7f0;
+  --color-bg-elevated: #ffffff;
+  --color-surface: #fffdf9;
+  --color-text: #1f2937;
+  --color-text-muted: #6b7280;
+  --color-border: #e7e0d3;
+  --color-primary: #0f766e;
+  --color-primary-dark: #0d5f59;
+  --color-accent: #c98a2c;
+  --color-shadow: rgba(31, 41, 55, 0.08);
+  --color-overlay: rgba(15, 23, 42, 0.5);
+
+  /* ألوان الأقسام (تُستخدم كتمييز لكل قسم) */
+  --section-morning: #f59e0b;
+  --section-evening: #6366f1;
+  --section-ruqyah: #10b981;
+  --section-quran: #0ea5e9;
+  --section-sunnah: #ec4899;
+
+  /* الخطوط */
+  /* خط النصوص الدينية (الأذكار/الآيات/الأحاديث) فقط */
+  --font-arabic: "Amiri Quran", "Amiri", "Traditional Arabic", "Noto Naskh Arabic", serif;
+  /* خط واجهة التطبيق العام (كل شيء ما عدا نصوص الأذكار) */
+  --font-ui: "Cairo", "Segoe UI", Tahoma, sans-serif;
+
+  /* مقياس حجم الخط القابل للتعديل من المستخدم */
+  --font-scale: 1;
+  /* أحجام مرنة (fluid) تتكيف مع أي عرض شاشة قبل ضرب مقياس المستخدم */
+  --font-size-dhikr: calc(clamp(1.15rem, 1rem + 1.4vw, 1.65rem) * var(--font-scale));
+  --font-size-body: calc(clamp(0.9rem, 0.85rem + 0.3vw, 1.05rem) * var(--font-scale));
+  --font-size-small: calc(clamp(0.78rem, 0.75rem + 0.2vw, 0.9rem) * var(--font-scale));
+  --font-size-title: calc(clamp(1.2rem, 1.05rem + 1vw, 1.5rem) * var(--font-scale));
+
+  /* المسافات */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1.25rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+
+  /* الحواف والظلال */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-card: 0 4px 20px var(--color-shadow);
+  --shadow-elevated: 0 10px 40px var(--color-shadow);
+
+  /* التوقيت والحركة */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 550ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* الوضع الليلي */
+:root[data-theme="dark"] {
+  --color-bg: #0b1120;
+  --color-bg-elevated: #131c31;
+  --color-surface: #111a2e;
+  --color-text: #e8ecf5;
+  --color-text-muted: #b7c1d6;
+  --color-border: #23304a;
+  --color-primary: #2dd4bf;
+  --color-primary-dark: #14b8a6;
+  --color-accent: #f5c05e;
+  --color-shadow: rgba(0, 0, 0, 0.45);
+  --color-overlay: rgba(0, 0, 0, 0.65);
+}
+
+/* احترام تفضيل النظام عند عدم تحديد اختيار صريح */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #0b1120;
+    --color-bg-elevated: #131c31;
+    --color-surface: #111a2e;
+    --color-text: #e8ecf5;
+    --color-text-muted: #b7c1d6;
+    --color-border: #23304a;
+    --color-primary: #2dd4bf;
+    --color-primary-dark: #14b8a6;
+    --color-accent: #f5c05e;
+    --color-shadow: rgba(0, 0, 0, 0.45);
+    --color-overlay: rgba(0, 0, 0, 0.65);
+  }
+}

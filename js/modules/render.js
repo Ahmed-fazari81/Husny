@@ -12,8 +12,7 @@ export function renderHome(container, sections, onSelect) {
   container.innerHTML = `
     <section class="home-hero">
       <h1>حصنك اليومي من الأذكار والأدعية</h1>
-      <p>اختر قسمًا لتبدأ</p>
-    </section>
+     </section>
     <nav class="sections-grid" aria-label="أقسام التطبيق"></nav>
   `;
 

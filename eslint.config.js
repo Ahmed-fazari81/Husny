@@ -35,6 +35,7 @@ export default [
         getComputedStyle: "readonly",
         setTimeout: "readonly",
         clearTimeout: "readonly",
+        DeviceOrientationEvent: "readonly",
       },
     },
     rules: {

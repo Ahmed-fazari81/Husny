@@ -58,11 +58,21 @@
   animation: slide-up var(--transition-slow) forwards;
 }
 
-.sections-grid .section-card:nth-child(1) { animation-delay: 0.05s; }
-.sections-grid .section-card:nth-child(2) { animation-delay: 0.12s; }
-.sections-grid .section-card:nth-child(3) { animation-delay: 0.19s; }
-.sections-grid .section-card:nth-child(4) { animation-delay: 0.26s; }
-.sections-grid .section-card:nth-child(5) { animation-delay: 0.33s; }
+.sections-grid .section-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.sections-grid .section-card:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.sections-grid .section-card:nth-child(3) {
+  animation-delay: 0.19s;
+}
+.sections-grid .section-card:nth-child(4) {
+  animation-delay: 0.26s;
+}
+.sections-grid .section-card:nth-child(5) {
+  animation-delay: 0.33s;
+}
 
 /* تأخير متتابع لبطاقات الأذكار */
 .dhikr-list .dhikr-card:nth-child(n) {

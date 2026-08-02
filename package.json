@@ -11,7 +11,15 @@
     "format": "prettier --write \"**/*.{js,css,html,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,css,html,json,md}\""
   },
-  "keywords": ["pwa", "azkar", "adhkar", "islamic", "quran", "hadith", "vanilla-js"],
+  "keywords": [
+    "pwa",
+    "azkar",
+    "adhkar",
+    "islamic",
+    "quran",
+    "hadith",
+    "vanilla-js"
+  ],
   "license": "MIT",
   "devDependencies": {
     "eslint": "^9.9.0",

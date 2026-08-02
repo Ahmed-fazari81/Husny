@@ -18,7 +18,8 @@ function calculateQiblaBearing(lat, lon) {
   const deltaLambda = toRad(KAABA_LON - lon);
 
   const y = Math.sin(deltaLambda) * Math.cos(phi2);
-  const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(deltaLambda);
+  const x =
+    Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(deltaLambda);
 
   return (toDeg(Math.atan2(y, x)) + 360) % 360;
 }
@@ -31,8 +32,7 @@ function calculateDistanceKm(lat, lon) {
   const dPhi = toRad(KAABA_LAT - lat);
   const dLambda = toRad(KAABA_LON - lon);
 
-  const a =
-    Math.sin(dPhi / 2) ** 2 + Math.cos(phi1) * Math.cos(phi2) * Math.sin(dLambda / 2) ** 2;
+  const a = Math.sin(dPhi / 2) ** 2 + Math.cos(phi1) * Math.cos(phi2) * Math.sin(dLambda / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
@@ -122,7 +122,8 @@ export function renderQibla(container, section) {
       (error) => {
         locateBtn.disabled = false;
         if (error.code === error.PERMISSION_DENIED) {
-          statusEl.textContent = "تم رفض إذن الوصول للموقع. يرجى السماح بالوصول للموقع من إعدادات المتصفح والمحاولة مجددًا.";
+          statusEl.textContent =
+            "تم رفض إذن الوصول للموقع. يرجى السماح بالوصول للموقع من إعدادات المتصفح والمحاولة مجددًا.";
         } else if (error.code === error.POSITION_UNAVAILABLE) {
           statusEl.textContent = "تعذّر تحديد موقعك الحالي. تأكد من تفعيل خدمة الموقع على جهازك.";
         } else {
@@ -149,13 +150,18 @@ export function renderQibla(container, section) {
   }
 
   async function enableLiveCompass() {
-    const eventName = "ondeviceorientationabsolute" in window ? "deviceorientationabsolute" : "deviceorientation";
+    const eventName =
+      "ondeviceorientationabsolute" in window ? "deviceorientationabsolute" : "deviceorientation";
 
-    if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
       try {
         const permission = await DeviceOrientationEvent.requestPermission();
         if (permission !== "granted") {
-          statusEl.textContent = "لم يُسمح بالوصول لمستشعر الاتجاه، سيبقى السهم ثابتًا على الزاوية المحسوبة.";
+          statusEl.textContent =
+            "لم يُسمح بالوصول لمستشعر الاتجاه، سيبقى السهم ثابتًا على الزاوية المحسوبة.";
           return;
         }
       } catch {

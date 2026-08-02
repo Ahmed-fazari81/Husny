@@ -1,20 +1,17 @@
 import { icon } from "./icons.js";
 
 /**
- * يبني صفحة أسماء الله الحسنى: حديث تمهيدي ثم شبكة بطاقات مرقّمة من 1 إلى 99
+ * يبني صفحة أسماء الله الحسنى: حديث تمهيدي ثم شبكة بطاقات تعرض الأسماء فقط
  * @param {HTMLElement} container
  * @param {object} section
  * @param {{intro?: object, items: Array}} content
  */
 export function renderNamesGrid(container, section, content) {
   const intro = content.intro;
-
   const introHtml = intro
     ? `
       <div class="names-intro">
         <p class="names-intro__text">${intro.text}</p>
-        ${intro.source ? `<p class="names-intro__source">${intro.source.type === "quran" ? "📖" : "🕊️"} ${intro.source.reference}${intro.source.grade ? ` · ${intro.source.grade}` : ""}</p>` : ""}
-        ${intro.virtue ? `<p class="names-intro__virtue">${intro.virtue}</p>` : ""}
       </div>
     `
     : "";
@@ -37,11 +34,7 @@ export function renderNamesGrid(container, section, content) {
     const card = document.createElement("article");
     card.className = "name-card";
     card.style.setProperty("--i", String(index));
-    card.innerHTML = `
-      <span class="name-card__number">${index + 1}</span>
-      <p class="name-card__name">${item.text}</p>
-      ${item.virtue ? `<p class="name-card__meaning">${item.virtue}</p>` : ""}
-    `;
+    card.innerHTML = `<p class="name-card__name">${item.text}</p>`;
     grid.appendChild(card);
   });
 }

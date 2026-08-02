@@ -1,5 +1,5 @@
 // عامل الخدمة: يوفر عمل التطبيق بالكامل دون إنترنت بعد أول تحميل
-const CACHE_VERSION = "v11";
+const CACHE_VERSION = "v12";
 const CACHE_NAME = `hisni-cache-${CACHE_VERSION}`;
 const OFFLINE_URL = "offline.html";
 

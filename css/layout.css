@@ -140,10 +140,10 @@ main.app-main {
   padding-bottom: var(--space-xl);
 }
 
-/* شبكة أسماء الله الحسنى */
+/* شبكة أسماء الله الحسنى: 3 أعمدة ثابتة على الجوال، تتدرج مع اتساع الشاشة */
 .names-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-sm);
   max-width: 900px;
   margin: 0 auto;

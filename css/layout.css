@@ -140,6 +140,28 @@ main.app-main {
   padding-bottom: var(--space-xl);
 }
 
+/* شبكة أسماء الله الحسنى */
+.names-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--space-sm);
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: var(--space-xl);
+}
+
+@media (min-width: 640px) {
+  .names-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .names-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
 .app-footer {
   text-align: center;
   padding: var(--space-sm) var(--space-md);

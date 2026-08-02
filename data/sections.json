@@ -46,7 +46,7 @@
       "title": "أسماء الله الحسنى",
       "titleEn": "The 99 Names of Allah",
       "icon": "sparkles",
-      "type": "list",
+      "type": "names",
       "description": "أسماء الله الحسنى التسعة والتسعون مع معانيها",
       "file": "data/asma-ul-husna.json",
       "color": "#ec4899"

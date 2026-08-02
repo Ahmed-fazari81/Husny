@@ -121,6 +121,10 @@ npm run format    # تنسيق تلقائي بـ Prettier
 
 قسم "اتجاه القبلة" الحالي مثال على نوع مختلف: لا يملك حقل `"file"` (لا بيانات JSON)، بل نوعه `"qibla"`. في [js/app.js](js/app.js)، دالة `showSection` تتحقق من `section.type` وتستدعي واجهة عرض مخصصة (`renderQibla` من [js/modules/qibla.js](js/modules/qibla.js)) بدلاً من تحميل ملف بيانات. يمكن تكرار هذا النمط لإضافة أي ميزة تفاعلية أخرى (مثل مواقيت الصلاة الحية بالاعتماد على الموقع الجغرافي).
 
+### ج) قسم شبكي مرقّم (`"type": "names"`) — مثال: أسماء الله الحسنى
+
+نوع ثالث لعرض عناصر قصيرة في شبكة بطاقات مرقّمة بدلاً من قائمة رأسية، مع فقرة تمهيدية (حديث) قبل الشبكة. يستخدم حقل `"file"` كالنوع العادي، لكن `renderNamesGrid` من [js/modules/namesGrid.js](js/modules/namesGrid.js) هو من يبني الواجهة، وتقرأ الدالة حقل `intro` الاختياري في ملف JSON لعرضه أعلى الشبكة.
+
 في الحالتين، لا حاجة لتعديل الشاشة الرئيسية أو الموجّه — تُقرأ الأقسام ديناميكيًا من `sections.json`.
 
 ## 🧩 التقنيات المستخدمة
@@ -195,6 +199,8 @@ Sections in `data/sections.json` come in two kinds, controlled by the `"type"` f
 **a) A text section (`"type": "list"`)** — create `data/<section-id>.json` following the existing schema, register it in `sections.json` (id, title, icon, file, color...), add a new SVG icon in `js/modules/icons.js` if needed, and add the file path to `PRECACHE_ASSETS` in `sw.js`.
 
 **b) An interactive section** (like Qibla) — omit `"file"` and give it a custom `"type"` (e.g. `"qibla"`). In [js/app.js](js/app.js), `showSection` checks `section.type` and calls a dedicated render function (`renderQibla` in [js/modules/qibla.js](js/modules/qibla.js)) instead of loading a JSON file. Reuse this pattern for other interactive features (e.g. live prayer times).
+
+**c) A numbered grid section** (`"type": "names"`, like the 99 Names of Allah) — short items rendered as a numbered card grid with an optional intro passage above it, via `renderNamesGrid` in [js/modules/namesGrid.js](js/modules/namesGrid.js). It still uses `"file"` like a normal list, but the JSON may include a top-level `intro` object.
 
 No other logic changes are required — the home screen and router read sections dynamically.
 

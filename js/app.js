@@ -7,6 +7,7 @@ import { getItem, setItem, StorageKeys } from "./modules/storage.js";
 import { registerServiceWorker, initInstallPrompt } from "./modules/swRegister.js";
 import { icon } from "./modules/icons.js";
 import { renderQibla } from "./modules/qibla.js";
+import { renderNamesGrid } from "./modules/namesGrid.js";
 
 const main = document.getElementById("main-view");
 const backBtn = document.getElementById("back-btn");
@@ -48,6 +49,12 @@ async function showSection(id) {
     }
 
     const content = await loadSectionContent(section);
+
+    if (section.type === "names") {
+      renderNamesGrid(main, section, content);
+      return;
+    }
+
     renderSection(main, section, content);
   } catch {
     renderError(main, "تعذّر تحميل محتوى هذا القسم.");

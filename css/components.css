@@ -522,3 +522,96 @@
   font-size: var(--font-size-small);
   color: var(--color-text-muted);
 }
+
+/* ============================================
+   أسماء الله الحسنى: حديث تمهيدي + بطاقات مرقّمة
+   ============================================ */
+.names-intro {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  max-width: 700px;
+  margin: 0 auto var(--space-lg);
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.names-intro__text {
+  font-family: var(--font-arabic);
+  font-size: var(--font-size-dhikr);
+  line-height: 2;
+  color: var(--color-text);
+}
+
+.names-intro__source {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin-top: var(--space-sm);
+}
+
+.names-intro__virtue {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+  font-style: italic;
+}
+
+.name-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-md) var(--space-sm) var(--space-sm);
+  text-align: center;
+  opacity: 0;
+  animation: slide-up var(--transition-slow) forwards;
+  animation-delay: calc(0.015s * var(--i, 0));
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.name-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-elevated);
+  border-color: color-mix(in srgb, var(--color-primary) 40%, var(--color-border));
+}
+
+.name-card__number {
+  position: absolute;
+  top: 0.5rem;
+  inset-inline-start: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  color: var(--color-primary-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+:root[data-theme="dark"] .name-card__number {
+  background: color-mix(in srgb, var(--color-primary) 26%, var(--color-surface));
+  color: #eafff9;
+}
+
+.name-card__name {
+  font-family: var(--font-arabic);
+  font-size: calc(1.15rem * var(--font-scale));
+  color: var(--color-primary);
+  margin-top: var(--space-sm);
+}
+
+.name-card__meaning {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin-top: 0.3rem;
+  line-height: 1.5;
+}

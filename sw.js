@@ -1,5 +1,5 @@
 // عامل الخدمة: يوفر عمل التطبيق بالكامل دون إنترنت بعد أول تحميل
-const CACHE_VERSION = "v13";
+const CACHE_VERSION = "v15";
 const CACHE_NAME = `hisni-cache-${CACHE_VERSION}`;
 const OFFLINE_URL = "offline.html";
 
@@ -62,12 +62,10 @@ const PRECACHE_ASSETS = [
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(PRECACHE_ASSETS))
-      .then(() => self.skipWaiting())
-  );
+  // لا نستدعي skipWaiting هنا عمدًا: نترك النسخة الجديدة "بانتظار" حتى يوافق
+  // المستخدم صراحةً عبر إشعار التحديث في الصفحة (انظر js/modules/swRegister.js)،
+  // بدلًا من استبدال النسخة العاملة فجأة أثناء استخدامه للتطبيق.
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_ASSETS)));
 });
 
 self.addEventListener("activate", (event) => {
@@ -79,6 +77,13 @@ self.addEventListener("activate", (event) => {
       )
       .then(() => self.clients.claim())
   );
+});
+
+// يستقبل طلب التفعيل الفوري من الصفحة بعد أن يضغط المستخدم "تحديث الآن"
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
 // استراتيجية: Cache First مع تحديث في الخلفية (Stale-While-Revalidate)

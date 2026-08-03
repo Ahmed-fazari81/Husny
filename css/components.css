@@ -269,9 +269,9 @@
 }
 
 /* ============================================
-   إشعار تثبيت التطبيق (عائم وأنيق)
+   إشعار عائم عام (تثبيت التطبيق / توفر تحديث)
    ============================================ */
-.install-toast {
+.app-toast {
   position: fixed;
   z-index: 90;
   bottom: var(--space-md);
@@ -288,12 +288,12 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-elevated);
   padding: var(--space-md);
-  animation: install-toast-in var(--transition-slow) both;
+  animation: app-toast-in var(--transition-slow) both;
 }
 
 /* على الشاشات الأوسع: تثبيته في الزاوية بعيدًا عن المحتوى بدلًا من المنتصف */
 @media (min-width: 640px) {
-  .install-toast {
+  .app-toast {
     inset-inline-end: auto;
     inset-inline-start: var(--space-md);
     margin-inline: 0;
@@ -301,11 +301,11 @@
   }
 }
 
-.install-toast.is-leaving {
-  animation: install-toast-out var(--transition-base) forwards;
+.app-toast.is-leaving {
+  animation: app-toast-out var(--transition-base) forwards;
 }
 
-.install-toast__close {
+.app-toast__close {
   position: absolute;
   top: 0.6rem;
   inset-inline-end: 0.6rem;
@@ -321,12 +321,12 @@
   border-radius: 50%;
 }
 
-.install-toast__close:hover {
+.app-toast__close:hover {
   background: var(--color-border);
   color: var(--color-text);
 }
 
-.install-toast__icon {
+.app-toast__icon {
   flex-shrink: 0;
   width: 44px;
   height: 44px;
@@ -337,29 +337,29 @@
   color: var(--color-primary);
 }
 
-.install-toast__icon svg {
+.app-toast__icon svg {
   width: 24px;
   height: 24px;
   stroke: currentColor;
 }
 
-.install-toast__body {
+.app-toast__body {
   flex: 1;
   min-width: 160px;
 }
 
-.install-toast__title {
+.app-toast__title {
   font-size: calc(1.05rem * var(--font-scale));
   font-weight: 700;
 }
 
-.install-toast__desc {
+.app-toast__desc {
   font-size: var(--font-size-small);
   color: var(--color-text-muted);
   margin-top: 0.2rem;
 }
 
-.install-toast__actions {
+.app-toast__actions {
   width: 100%;
   display: flex;
   justify-content: flex-end;
@@ -367,8 +367,7 @@
   margin-top: var(--space-xs);
 }
 
-.install-toast__later,
-.install-toast__install {
+.app-toast__btn {
   border: none;
   border-radius: var(--radius-sm);
   padding: 0.5rem 1rem;
@@ -379,22 +378,22 @@
     background var(--transition-fast);
 }
 
-.install-toast__later {
+.app-toast__btn--ghost {
   background: transparent;
   color: var(--color-text-muted);
 }
 
-.install-toast__later:hover {
+.app-toast__btn--ghost:hover {
   background: var(--color-border);
   color: var(--color-text);
 }
 
-.install-toast__install {
+.app-toast__btn--primary {
   background: var(--color-primary);
   color: #fff;
 }
 
-.install-toast__install:hover {
+.app-toast__btn--primary:hover {
   transform: translateY(-1px);
   background: var(--color-primary-dark);
 }
@@ -606,7 +605,7 @@
   box-shadow: var(--shadow-elevated);
   padding: var(--space-lg) var(--space-md) var(--space-md);
   text-align: center;
-  animation: install-toast-in var(--transition-base) both;
+  animation: app-toast-in var(--transition-base) both;
 }
 
 .confirm-dialog__message {

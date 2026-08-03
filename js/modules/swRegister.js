@@ -2,13 +2,17 @@ import { icon } from "./icons.js";
 
 const SHOW_DELAY_MS = 1500;
 
-/** يسجّل عامل الخدمة إن كان مدعومًا */
+/** يسجّل عامل الخدمة إن كان مدعومًا، ويراقب توفر تحديثات جديدة */
 export function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
+
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch((err) => {
-      console.error("فشل تسجيل عامل الخدمة:", err);
-    });
+    navigator.serviceWorker
+      .register("sw.js")
+      .then((registration) => watchForUpdates(registration))
+      .catch((err) => {
+        console.error("فشل تسجيل عامل الخدمة:", err);
+      });
   });
 }
 
@@ -17,6 +21,77 @@ export function isRunningStandalone() {
   return (
     window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
   );
+}
+
+/**
+ * يراقب تسجيل عامل الخدمة لاكتشاف نسخة جديدة، ويعرض إشعارًا يطلب من المستخدم
+ * الضغط على "تحديث الآن" بدلًا من تحديث الصفحة تلقائيًا وبصمت (لتفادي مفاجأته
+ * بإعادة تحميل أثناء استخدامه للتطبيق). عند التحديث الفعلي تُعاد الصفحة تلقائيًا.
+ */
+function watchForUpdates(registration) {
+  if (registration.waiting) {
+    showUpdateToast(registration);
+  }
+
+  registration.addEventListener("updatefound", () => {
+    const newWorker = registration.installing;
+    if (!newWorker) return;
+
+    newWorker.addEventListener("statechange", () => {
+      // "installed" مع وجود متحكّم حالي يعني أن هذا تحديث لنسخة سابقة، وليس أول تثبيت
+      if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+        showUpdateToast(registration);
+      }
+    });
+  });
+
+  // تحقّق من وجود تحديث كلما عاد المستخدم للتطبيق (بعد تصغيره أو تبديل التطبيقات)
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      registration.update().catch(() => {});
+    }
+  });
+
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (reloaded) return;
+    reloaded = true;
+    window.location.reload();
+  });
+}
+
+function showUpdateToast(registration) {
+  if (document.querySelector('[data-toast="update"]')) return;
+
+  const card = document.createElement("div");
+  card.className = "app-toast";
+  card.dataset.toast = "update";
+  card.setAttribute("role", "dialog");
+  card.setAttribute("aria-label", "تحديث التطبيق");
+  card.innerHTML = `
+    <button type="button" class="app-toast__close" aria-label="إغلاق">✕</button>
+    <div class="app-toast__icon">${icon("refresh")}</div>
+    <div class="app-toast__body">
+      <p class="app-toast__title">يتوفر تحديث جديد</p>
+      <p class="app-toast__desc">حدّث الآن لتحصل على أحدث الأذكار والميزات</p>
+    </div>
+    <div class="app-toast__actions">
+      <button type="button" class="app-toast__btn app-toast__btn--primary">تحديث الآن</button>
+    </div>
+  `;
+
+  const hide = () => {
+    card.classList.add("is-leaving");
+    setTimeout(() => card.remove(), 300);
+  };
+
+  card.querySelector(".app-toast__btn--primary").addEventListener("click", () => {
+    registration.waiting?.postMessage({ type: "SKIP_WAITING" });
+    hide();
+  });
+  card.querySelector(".app-toast__close").addEventListener("click", hide);
+
+  document.body.appendChild(card);
 }
 
 /**
@@ -40,26 +115,27 @@ export function initInstallPrompt() {
   });
 
   function showPrompt() {
-    if (!deferredPrompt || document.querySelector(".install-toast")) return;
+    if (!deferredPrompt || document.querySelector('[data-toast="install"]')) return;
 
     const card = document.createElement("div");
-    card.className = "install-toast";
+    card.className = "app-toast";
+    card.dataset.toast = "install";
     card.setAttribute("role", "dialog");
     card.setAttribute("aria-label", "تثبيت التطبيق");
     card.innerHTML = `
-      <button type="button" class="install-toast__close" aria-label="إغلاق">✕</button>
-      <div class="install-toast__icon">${icon("install")}</div>
-      <div class="install-toast__body">
-        <p class="install-toast__title">ثبّت حصني على جهازك</p>
-        <p class="install-toast__desc">وصول أسرع وعمل كامل دون إنترنت</p>
+      <button type="button" class="app-toast__close" aria-label="إغلاق">✕</button>
+      <div class="app-toast__icon">${icon("install")}</div>
+      <div class="app-toast__body">
+        <p class="app-toast__title">ثبّت حصني على جهازك</p>
+        <p class="app-toast__desc">وصول أسرع وعمل كامل دون إنترنت</p>
       </div>
-      <div class="install-toast__actions">
-        <button type="button" class="install-toast__later">لاحقًا</button>
-        <button type="button" class="install-toast__install">تثبيت</button>
+      <div class="app-toast__actions">
+        <button type="button" class="app-toast__btn app-toast__btn--ghost">لاحقًا</button>
+        <button type="button" class="app-toast__btn app-toast__btn--primary">تثبيت</button>
       </div>
     `;
 
-    card.querySelector(".install-toast__install").addEventListener("click", async () => {
+    card.querySelector(".app-toast__btn--primary").addEventListener("click", async () => {
       if (!deferredPrompt) return;
       deferredPrompt.prompt();
       await deferredPrompt.userChoice;
@@ -67,14 +143,14 @@ export function initInstallPrompt() {
       hidePrompt();
     });
 
-    card.querySelector(".install-toast__later").addEventListener("click", hidePrompt);
-    card.querySelector(".install-toast__close").addEventListener("click", hidePrompt);
+    card.querySelector(".app-toast__btn--ghost").addEventListener("click", hidePrompt);
+    card.querySelector(".app-toast__close").addEventListener("click", hidePrompt);
 
     document.body.appendChild(card);
   }
 
   function hidePrompt() {
-    const card = document.querySelector(".install-toast");
+    const card = document.querySelector('[data-toast="install"]');
     if (!card) return;
     card.classList.add("is-leaving");
     setTimeout(() => card.remove(), 300);

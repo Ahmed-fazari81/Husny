@@ -1,10 +1,15 @@
 import { showConfirm } from "./confirmDialog.js";
+import { showToast } from "./toast.js";
 import { isRunningStandalone } from "./swRegister.js";
 import { refresh } from "./router.js";
+
+const PENDING_EXIT_WINDOW_MS = 2500;
 
 let currentHash = "#/";
 let allowExit = false;
 let guardActive = false;
+let pendingExit = false;
+let pendingExitTimer = null;
 
 /**
  * يُستدعى من الموجّه بعد كل تنقّل ليعرف الحارس أين يعيد المستخدم عند الإلغاء.
@@ -19,10 +24,11 @@ export function trackHash(hash) {
 }
 
 /**
- * يجعل زر/إيماءة الرجوع في الجهاز (أندرويد) بمثابة "خروج من التطبيق" مع تأكيد،
- * في كل الشاشات دون استثناء، بدلًا من التنقل داخل السجل. يعمل فقط عند تشغيل
- * التطبيق كتطبيق مثبّت (standalone)، حتى لا يتعارض مع سلوك الرجوع الطبيعي
- * في متصفح عادي.
+ * يجعل زر/إيماءة الرجوع في الجهاز (أندرويد) بمثابة "خروج من التطبيق"، على نمط
+ * "اضغط مرة أخرى للخروج" الشائع في التطبيقات: الضغطة الأولى تعرض تنبيهًا فقط،
+ * والضغطة الثانية خلال ثوانٍ قليلة تعرض نافذة التأكيد الفعلية. يعمل فقط عند
+ * تشغيل التطبيق كتطبيق مثبّت (standalone)، حتى لا يتعارض مع سلوك الرجوع
+ * الطبيعي في متصفح عادي.
  *
  * ملاحظة: نظام iOS لا يملك زر/إيماءة رجوع للأجهزة على مستوى النظام لتطبيقات الويب
  * المضافة للشاشة الرئيسية، لذا لا يوجد ما يمكن اعتراضه هناك؛ الخروج يتم بإيماءة
@@ -41,6 +47,19 @@ export function initExitGuard() {
     // نفّذ حدث hashchange عرضًا انتقاليًا خاطئًا قبل أن يصل تنفيذنا إلى هنا
     history.pushState({ hisniGuard: true }, "", currentHash);
     refresh();
+
+    if (!pendingExit) {
+      pendingExit = true;
+      showToast("اضغط زر الرجوع مرة أخرى للخروج من التطبيق", PENDING_EXIT_WINDOW_MS);
+      clearTimeout(pendingExitTimer);
+      pendingExitTimer = setTimeout(() => {
+        pendingExit = false;
+      }, PENDING_EXIT_WINDOW_MS);
+      return;
+    }
+
+    clearTimeout(pendingExitTimer);
+    pendingExit = false;
 
     showConfirm("هل تريد الخروج من التطبيق؟").then((confirmed) => {
       if (!confirmed) return;

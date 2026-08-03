@@ -37,6 +37,15 @@ export function initRouter(handlers, onRouteResolved) {
   resolveRoute();
 }
 
+/**
+ * يعيد تنفيذ العرض الحالي بالاعتماد على location.hash فورًا.
+ * يستخدمها exitGuard.js لتصحيح أي عرض انتقالي خاطئ قد ينتج عن ترتيب غير مضمون
+ * بين أحداث popstate وhashchange عند اعتراض زر الرجوع في الجهاز.
+ */
+export function refresh() {
+  resolveRoute();
+}
+
 function navigate(hash) {
   history.replaceState(history.state, "", hash);
   resolveRoute();

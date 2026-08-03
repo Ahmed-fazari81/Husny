@@ -44,6 +44,7 @@ function calculateDistanceKm(lat, lon) {
 export function renderQibla(container, section) {
   let qiblaBearing = null;
   let orientationHandler = null;
+  let liveActive = false;
 
   container.innerHTML = `
     <header class="section-view__header">
@@ -68,21 +69,17 @@ export function renderQibla(container, section) {
       </div>
 
       <p class="qibla__status" id="qibla-status" role="status">
-        اضغط على زر "تحديد موقعي" لمعرفة اتجاه القبلة من مكانك.
+        اضغط على الزر لتحديد اتجاه القبلة من مكانك.
       </p>
 
       <div class="qibla__actions">
         <button type="button" class="qibla__btn qibla__btn--primary" id="qibla-locate-btn">
-          ${icon("location")} تحديد موقعي
-        </button>
-        <button type="button" class="qibla__btn" id="qibla-live-btn" hidden>
-          ${icon("compass")} تفعيل البوصلة الحية
+          ${icon("compass")} تحديد الاتجاه
         </button>
       </div>
 
       <p class="qibla__note">
-        بعد تحديد موقعك، وجّه أعلى جهازك (الشمال) بمساعدة بوصلة حقيقية، وسيشير السهم إلى اتجاه الكعبة المشرفة.
-        على الجوّالات الداعمة، يمكنك تفعيل "البوصلة الحية" ليتحرك السهم تلقائيًا مع حركة جهازك.
+        قد يطلب منك المتصفح تفعيل خدمة الموقع والسماح للتطبيق بالوصول إليها — هذا مطلوب لحساب اتجاه الكعبة من مكانك فقط. على الجوّالات الداعمة، سيتحرك السهم تلقائيًا مع حركة جهازك بمجرد التحديد.
       </p>
     </div>
   `;
@@ -90,48 +87,9 @@ export function renderQibla(container, section) {
   const statusEl = container.querySelector("#qibla-status");
   const needleEl = container.querySelector("#qibla-needle");
   const locateBtn = container.querySelector("#qibla-locate-btn");
-  const liveBtn = container.querySelector("#qibla-live-btn");
 
   function setNeedleRotation(deg) {
     needleEl.style.transform = `translate(-50%, -100%) rotate(${deg}deg)`;
-  }
-
-  function locate() {
-    if (!("geolocation" in navigator)) {
-      statusEl.textContent = "متصفحك لا يدعم تحديد الموقع الجغرافي.";
-      return;
-    }
-
-    statusEl.textContent = "جارٍ تحديد موقعك...";
-    locateBtn.disabled = true;
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        locateBtn.disabled = false;
-        const { latitude, longitude } = position.coords;
-        qiblaBearing = calculateQiblaBearing(latitude, longitude);
-        const distance = Math.round(calculateDistanceKm(latitude, longitude));
-
-        setNeedleRotation(qiblaBearing);
-        statusEl.innerHTML = `اتجاه القبلة: <strong>${Math.round(qiblaBearing)}°</strong> من الشمال (باتجاه عقارب الساعة) — المسافة إلى الكعبة: <strong>${distance.toLocaleString("ar")}</strong> كم`;
-
-        if (typeof DeviceOrientationEvent !== "undefined") {
-          liveBtn.hidden = false;
-        }
-      },
-      (error) => {
-        locateBtn.disabled = false;
-        if (error.code === error.PERMISSION_DENIED) {
-          statusEl.textContent =
-            "تم رفض إذن الوصول للموقع. يرجى السماح بالوصول للموقع من إعدادات المتصفح والمحاولة مجددًا.";
-        } else if (error.code === error.POSITION_UNAVAILABLE) {
-          statusEl.textContent = "تعذّر تحديد موقعك الحالي. تأكد من تفعيل خدمة الموقع على جهازك.";
-        } else {
-          statusEl.textContent = "انتهت مهلة تحديد الموقع. حاول مرة أخرى.";
-        }
-      },
-      { enableHighAccuracy: true, timeout: 12000, maximumAge: 300000 }
-    );
   }
 
   function handleOrientation(event) {
@@ -149,35 +107,68 @@ export function renderQibla(container, section) {
     setNeedleRotation((qiblaBearing - heading + 360) % 360);
   }
 
-  async function enableLiveCompass() {
+  function startLiveCompass() {
+    if (liveActive || typeof DeviceOrientationEvent === "undefined") return;
     const eventName =
       "ondeviceorientationabsolute" in window ? "deviceorientationabsolute" : "deviceorientation";
+    orientationHandler = handleOrientation;
+    window.addEventListener(eventName, orientationHandler);
+    liveActive = true;
+  }
 
+  function locateAndOrient() {
+    if (!("geolocation" in navigator)) {
+      statusEl.textContent = "متصفحك لا يدعم تحديد الموقع الجغرافي.";
+      return;
+    }
+
+    locateBtn.disabled = true;
+    statusEl.textContent = "جارٍ تحديد موقعك...";
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        locateBtn.disabled = false;
+        const { latitude, longitude } = position.coords;
+        qiblaBearing = calculateQiblaBearing(latitude, longitude);
+        const distance = Math.round(calculateDistanceKm(latitude, longitude));
+
+        setNeedleRotation(qiblaBearing);
+        startLiveCompass();
+
+        const liveNote = liveActive ? " (السهم يتحرك تلقائيًا مع جهازك)" : "";
+        statusEl.innerHTML = `اتجاه القبلة: <strong>${Math.round(qiblaBearing)}°</strong> من الشمال — المسافة إلى الكعبة: <strong>${distance.toLocaleString("ar")}</strong> كم${liveNote}`;
+      },
+      (error) => {
+        locateBtn.disabled = false;
+        if (error.code === error.PERMISSION_DENIED) {
+          statusEl.textContent =
+            "تم رفض إذن الوصول للموقع. يرجى تفعيل خدمة الموقع والسماح للتطبيق بالوصول إليها من إعدادات المتصفح، ثم إعادة المحاولة.";
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          statusEl.textContent = "تعذّر تحديد موقعك الحالي. تأكد من تفعيل خدمة الموقع على جهازك.";
+        } else {
+          statusEl.textContent = "انتهت مهلة تحديد الموقع. حاول مرة أخرى.";
+        }
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 300000 }
+    );
+  }
+
+  async function onLocateClick() {
+    // على iOS يجب طلب إذن مستشعر الاتجاه مباشرة داخل حدث الضغط، قبل أي عملية غير متزامنة،
+    // وإلا يُرفض الإذن تلقائيًا لخروج الطلب عن سياق تفاعل المستخدم
     if (
       typeof DeviceOrientationEvent !== "undefined" &&
       typeof DeviceOrientationEvent.requestPermission === "function"
     ) {
       try {
-        const permission = await DeviceOrientationEvent.requestPermission();
-        if (permission !== "granted") {
-          statusEl.textContent =
-            "لم يُسمح بالوصول لمستشعر الاتجاه، سيبقى السهم ثابتًا على الزاوية المحسوبة.";
-          return;
-        }
+        await DeviceOrientationEvent.requestPermission();
       } catch {
-        statusEl.textContent = "تعذّر تفعيل البوصلة الحية على هذا الجهاز.";
-        return;
+        // نتجاهل الفشل ونكمل بالاتجاه الثابت فقط
       }
     }
 
-    if (orientationHandler) window.removeEventListener(eventName, orientationHandler);
-    orientationHandler = handleOrientation;
-    window.addEventListener(eventName, orientationHandler);
-    liveBtn.textContent = "";
-    liveBtn.innerHTML = `${icon("compass")} البوصلة الحية مُفعّلة`;
-    liveBtn.disabled = true;
+    locateAndOrient();
   }
 
-  locateBtn.addEventListener("click", locate);
-  liveBtn.addEventListener("click", enableLiveCompass);
+  locateBtn.addEventListener("click", onLocateClick);
 }

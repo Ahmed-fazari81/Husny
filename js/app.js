@@ -3,8 +3,8 @@ import { renderHome, renderSection, renderLoading, renderError } from "./modules
 import { initRouter, goHome, goToSection } from "./modules/router.js";
 import { initTheme, toggleTheme, getCurrentTheme } from "./modules/theme.js";
 import { initFontSize, increaseFontSize, decreaseFontSize } from "./modules/fontSize.js";
-import { getItem, setItem, StorageKeys } from "./modules/storage.js";
 import { registerServiceWorker, initInstallPrompt } from "./modules/swRegister.js";
+import { initExitGuard, trackHash } from "./modules/exitGuard.js";
 import { icon } from "./modules/icons.js";
 import { renderQibla } from "./modules/qibla.js";
 import { renderNamesGrid } from "./modules/namesGrid.js";
@@ -41,8 +41,6 @@ async function showSection(id) {
       renderError(main, "القسم غير موجود.");
       return;
     }
-    setItem(StorageKeys.LAST_SECTION, id);
-
     if (section.type === "qibla") {
       renderQibla(main, section);
       return;
@@ -86,16 +84,15 @@ function init() {
   registerServiceWorker();
   initInstallPrompt();
 
-  initRouter({
-    home: showHome,
-    section: showSection,
-  });
+  initRouter(
+    {
+      home: showHome,
+      section: showSection,
+    },
+    trackHash
+  );
 
-  // إذا لم يوجد مسار محدد، أعد المستخدم لآخر قسم زاره
-  if (!window.location.hash) {
-    const lastSection = getItem(StorageKeys.LAST_SECTION, null);
-    if (lastSection) goToSection(lastSection);
-  }
+  initExitGuard();
 }
 
 document.addEventListener("DOMContentLoaded", init);

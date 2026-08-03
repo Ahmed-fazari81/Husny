@@ -36,6 +36,7 @@ export default [
         setTimeout: "readonly",
         clearTimeout: "readonly",
         DeviceOrientationEvent: "readonly",
+        history: "readonly",
       },
     },
     rules: {

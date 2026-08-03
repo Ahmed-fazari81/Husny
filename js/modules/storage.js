@@ -29,5 +29,4 @@ export function setItem(key, value) {
 export const StorageKeys = {
   THEME: "theme",
   FONT_SCALE: "fontScale",
-  LAST_SECTION: "lastSection",
 };

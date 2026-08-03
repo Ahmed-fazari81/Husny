@@ -577,3 +577,77 @@
   color: var(--color-primary);
   text-align: center;
 }
+
+/* ============================================
+   نافذة تأكيد (نعم/لا) — تُستخدم لتأكيد الخروج من التطبيق
+   ============================================ */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  background: var(--color-overlay);
+  animation: fade-in var(--transition-fast) both;
+}
+
+.confirm-overlay.is-leaving {
+  animation: fade-in var(--transition-fast) reverse both;
+}
+
+.confirm-dialog {
+  width: 100%;
+  max-width: 340px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevated);
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+  text-align: center;
+  animation: install-toast-in var(--transition-base) both;
+}
+
+.confirm-dialog__message {
+  font-size: calc(1.05rem * var(--font-scale));
+  color: var(--color-text);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+}
+
+.confirm-dialog__actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.confirm-dialog__actions button {
+  flex: 1;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1rem;
+  font-size: var(--font-size-small);
+  font-weight: 700;
+  transition:
+    transform var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.confirm-dialog__no {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+.confirm-dialog__no:hover {
+  background: color-mix(in srgb, var(--color-border) 70%, var(--color-text-muted));
+}
+
+.confirm-dialog__yes {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.confirm-dialog__yes:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}

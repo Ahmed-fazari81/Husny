@@ -13,7 +13,7 @@ export function registerServiceWorker() {
 }
 
 /** @returns {boolean} هل التطبيق مثبَّت ويعمل حاليًا كتطبيق مستقل */
-function isRunningStandalone() {
+export function isRunningStandalone() {
   return (
     window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
   );

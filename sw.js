@@ -1,5 +1,5 @@
 // عامل الخدمة: يوفر عمل التطبيق بالكامل دون إنترنت بعد أول تحميل
-const CACHE_VERSION = "v12";
+const CACHE_VERSION = "v13";
 const CACHE_NAME = `hisni-cache-${CACHE_VERSION}`;
 const OFFLINE_URL = "offline.html";
 
@@ -38,6 +38,8 @@ const PRECACHE_ASSETS = [
   "js/modules/swRegister.js",
   "js/modules/qibla.js",
   "js/modules/namesGrid.js",
+  "js/modules/confirmDialog.js",
+  "js/modules/exitGuard.js",
 
   "data/sections.json",
   "data/morning-azkar.json",
